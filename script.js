@@ -1,7 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
     nextButton.classList.add('hide');
+    var islogdin = localStorage.getItem("islogdin");
+    if (islogdin !== "true") {
+        location.href = "register.html";
+        return;
+    }  
   });
-  
+  const admin = {
+    email: "abc@gmail.com",
+    password: "87654321"
+  }
+  let userid = localStorage.getItem("loggedInUserId");
   const startButton = document.getElementById('start-btn');
   const nextButton = document.getElementById('next-btn');
   const questionContainerElement = document.getElementById('question-container');
@@ -12,6 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
   resultsElement.setAttribute('id', 'results');
   resultsElement.classList.add('results', 'hide');
   quizAppElement.appendChild(resultsElement);
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+  let user = users.find(user => user.id === userid)
+  localStorage.setItem("admin", JSON.stringify(admin))
   
   let shuffledQuestions, currentQuestionIndex;
   let score = 0;
@@ -100,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resultsElement.classList.remove('hide');
     resultsElement.innerHTML = `
         <h2>Quiz Completed!</h2>
-        <p>Your score: ${score} out of ${shuffledQuestions.length}</p>
+        <p>${user.fullName}: ${score} out of ${shuffledQuestions.length}</p>
         <button onclick="restartQuiz()" class = "restartbtn" >Restart Quiz</button>
     `;
     quizAppElement.appendChild(resultsElement);
